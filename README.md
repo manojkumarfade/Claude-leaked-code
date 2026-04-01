@@ -23,6 +23,8 @@ The published npm package (`@anthropic-ai/claude-code`) included a source map fi
 
 Anthropic publishes Claude Code as a bundled JavaScript CLI on npm. The published package includes a source map file (`cli.js.map`) that contains the original TypeScript source. This repository simply extracts and preserves that source for easier reading and reference.
 
+## [HOW DOES CALUDE WORK ACTUALLY?](https://www.mintlify.com/VineeTagarwaL-code/claude-code/concepts/how-it-works)->[VineeTagarwal](https://github.com/VineeTagarwaL-code)
+
 ## How to get it yourself
 
 ### Clone this repository
