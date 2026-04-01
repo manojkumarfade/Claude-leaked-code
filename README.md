@@ -9,7 +9,9 @@ The source was obtained by unpacking the source map (`cli.js.map`) bundled with 
 - **npm package:** [@anthropic-ai/claude-code v2.1.88](https://www.npmjs.com/package/@anthropic-ai/claude-code/v/2.1.88)
 - **Official homepage:** [github.com/anthropics/claude-code](https://github.com/anthropics/claude-code)
 
-## How It Leaked
+## How It Leaked [READ THE FULL ARTICLE](https://techstartups.com/2026/03/31/anthropics-claude-source-code-leak-goes-viral-again-after-full-source-hits-npm-registry-revealing-hidden-capybara-models-and-ai-pet/) 
+<img width="838" height="727" alt="image" src="https://github.com/user-attachments/assets/bcd19233-7300-4559-b1bf-2ee2f234d0ec" />
+
 
 The source code leak was discovered by [Chaofan Shou (@Fried_rice)](https://x.com/Fried_rice) and posted publicly on March 31, 2026:
 
@@ -24,6 +26,52 @@ The published npm package (`@anthropic-ai/claude-code`) included a source map fi
 Anthropic publishes Claude Code as a bundled JavaScript CLI on npm. The published package includes a source map file (`cli.js.map`) that contains the original TypeScript source. This repository simply extracts and preserves that source for easier reading and reference.
 
 ## [HOW DOES CALUDE WORK ACTUALLY?](https://www.mintlify.com/VineeTagarwaL-code/claude-code/concepts/how-it-works)->[VineeTagarwal](https://github.com/VineeTagarwaL-code)
+Based on everything explored in the source code, here's the full technical recipe behind Claude Code's memory architecture:
+
+[shared by claude code]
+
+Claude Code’s memory system is actually insanely well-designed. It isn't like  “store everything” but constrained, structured and self-healing memory.
+
+The architecture is doing a few very non-obvious things:
+
+> Memory = index, not storage
++ MEMORY.md is always loaded, but it’s just pointers (~150 chars/line)
++ actual knowledge lives outside, fetched only when needed
+
+> 3-layer design (bandwidth aware)
+ + index (always)
+ + topic files (on-demand)
++ transcripts (never read, only grep’d)
+
+> Strict write discipline
+ +  write to file → then update index
+ + never dump content into the index
+ +  prevents entropy / context pollution
+
+> Background “memory rewriting” (autoDream)
+ +  merges, dedupes, removes contradictions
+ +  converts vague → absolute
+ +  aggressively prunes
+ +  memory is continuously edited, not appended
+
+> Staleness is first-class
+ + if memory ≠ reality → memory is wrong
+ +  code-derived facts are never stored
+ +  index is forcibly truncated
+
+> Isolation matters
+ + consolidation runs in a forked subagent
+ + limited tools → prevents corruption of main context
+
+> Retrieval is skeptical, not blind
+ +  memory is a hint, not truth
+ +  model must verify before using
+
+> What they don’t store is the real insight
+ +  no debugging logs, no code structure, no PR history
+ +  if it’s derivable, don’t persist it
+<img width="1353" height="811" alt="image" src="https://github.com/user-attachments/assets/0b559b8a-9553-4cfd-9dfd-537f49c9f56b" />
+
 
 ## How to get it yourself
 
